@@ -135,6 +135,7 @@
             this.Controls.Add(this.scottPlotUC2);
             this.Controls.Add(this.scottPlotUC1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ScottPlot Microphone FFT Demo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
