@@ -13,8 +13,7 @@ namespace ScottPlotMicrophoneFFT
 {
     public partial class Form1 : Form
     {
-        double[] aJ3 = new double[21 + 1];
-        double[] bJ3 = new double[21];
+      
 
         public Form1()
         {
@@ -32,20 +31,33 @@ namespace ScottPlotMicrophoneFFT
             scottPlotUC1.fig.labelX = "index";
             scottPlotUC1.Redraw();
 
+            scottPlotUC2.fig.labelTitle = "INPUTS(Bj gauss)";
+            scottPlotUC2.fig.labelY = "Gauss POW";
+            scottPlotUC2.fig.labelX = "Index";
+            scottPlotUC2.Redraw();
+
+            scottPlotUC3.fig.labelTitle = "INPUTS(Aj gauss)";
+            scottPlotUC3.fig.labelY = "MSE";
+            scottPlotUC3.fig.labelX = "Index";
+            scottPlotUC3.Redraw();
+
             scottPlotUC4.fig.labelTitle = "INPUTS(Bj)";
             scottPlotUC4.fig.labelY = "Inputs ";
             scottPlotUC4.fig.labelX = "index";
             scottPlotUC4.Redraw();
 
-            scottPlotUC2.fig.labelTitle = "GAUSS Distribution";
-            scottPlotUC2.fig.labelY = "Gauss POW";
-            scottPlotUC2.fig.labelX = "Index";
-            scottPlotUC2.Redraw();
+            scottPlotUC5.fig.labelTitle = "Mean Square Error Normal";
+            scottPlotUC5.fig.labelY = "MSE";
+            scottPlotUC5.fig.labelX = "index";
+            scottPlotUC5.Redraw();
 
-            scottPlotUC3.fig.labelTitle = "Mean Square Error";
-            scottPlotUC3.fig.labelY = "MSE";
-            scottPlotUC3.fig.labelX = "Index";
-            scottPlotUC3.Redraw();
+
+            scottPlotUC6.fig.labelTitle = "Mean Square Error gauss";
+            scottPlotUC6.fig.labelY = "Inputs ";
+            scottPlotUC6.fig.labelX = "index";
+            scottPlotUC6.Redraw();
+
+
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -63,8 +75,12 @@ namespace ScottPlotMicrophoneFFT
             int mseindex = 0;
             int M = 21;
             double[] mse_arr = new double[M];
+            double[] mse_arr_gauss = new double[M];
             double[] aJ = new double[M + 1];
-            double[] bJ = new double[M];
+            double[] bJ_normal = new double[M];
+            double[] bJ_gauss = new double[M];
+            double[] mse_gauss = new double[M];
+            double[] aJ_gauss = new double[M + 1];
             double[] gauss = new double[M + 1];
             double MSE_er = 0;
             int minValue = -20, maxValue = 20;
@@ -72,145 +88,67 @@ namespace ScottPlotMicrophoneFFT
 
             for (int i = 0; i < M + 1; i++)
             {
-                retry:
+            retry:
                 aJ[i] = rand.Next(minValue, maxValue);
                 for (int k = 0; k < i; k++)
                 {
                     if (aJ[i] == aJ[k])
                         goto retry;
                 }
-               
             }
-
             Array.Sort(aJ);
-
-
+            double ss = standart_sapma(aJ);
+            double mu = ortalama(aJ);
+            for (int j = 0; j < aJ.Length; j++)
+            {
+                gauss[j] = gauss_dagilimi(aJ[j], mu, ss);
+            }
+            for (int j = 0; j < aJ.Length; j++)
+            {
+                aJ_gauss[j] += gauss[j];
+            }
+            
             for (int i = 0; i < M; i++)
             {
-
-                bJ[i] = (aJ[i + 1] + aJ[i]) / 2;
-
-                double ss = standart_sapma(aJ);
-                double mu = ortalama(aJ);
-                for (int j = 0; j < M; j++)
-                {
-                    gauss[j] = gauss_dagilimi(aJ[j], mu, ss);
-
-                }
-                MSE_er = MSE(aJ, bJ);
-
+                bJ_normal[i] = (aJ[i + 1] + aJ[i]) / 2;
+                MSE_er = MSE(aJ, bJ_normal);
                 label1.Text = "MSE=" + MSE_er;
                 mse_arr[mseindex] = MSE_er;
                 mseindex++;
-
+            }
+            mseindex = 0;
+            for (int i = 0; i < M; i++)
+            {
+                bJ_gauss[i] = (aJ_gauss[i + 1] + aJ_gauss[i]) / 2;
+                MSE_er = MSE(aJ_gauss, bJ_gauss);
+                label1.Text = "MSE=" + MSE_er;
+                mse_arr_gauss[mseindex] = MSE_er;
+                mseindex++;
             }
             scottPlotUC1.Clear();
             scottPlotUC1.PlotSignal(aJ, 1, Color.Blue);
-            scottPlotUC4.Clear();
-            scottPlotUC4.PlotSignal(bJ, 1, Color.Red);
             scottPlotUC2.Clear();
-            scottPlotUC2.PlotSignal(gauss, 1, Color.Blue);
+            scottPlotUC2.PlotSignal(bJ_gauss, 1, Color.Blue);
             scottPlotUC3.Clear();
-            scottPlotUC3.PlotSignal(mse_arr, 1, Color.Blue);
-            Array.Copy(aJ, aJ3, aJ.Length);
-            Array.Copy(bJ, bJ3, bJ.Length);
-           
+            scottPlotUC3.PlotSignal(aJ_gauss, 1, Color.Blue);
+            scottPlotUC4.Clear();
+            scottPlotUC4.PlotSignal(bJ_normal, 1, Color.Red);
+            scottPlotUC5.Clear();
+            scottPlotUC5.PlotSignal(mse_arr, 1, Color.Blue);
+            scottPlotUC6.Clear();
+            scottPlotUC6.PlotSignal(mse_arr_gauss, 1, Color.Blue);
             if (needsAutoScaling)
             {
                 scottPlotUC1.AxisAuto();
                 scottPlotUC2.AxisAuto();
                 scottPlotUC3.AxisAuto();
-
                 scottPlotUC4.AxisAuto();
+                scottPlotUC5.AxisAuto();
+                scottPlotUC6.AxisAuto();
                 needsAutoScaling = false;
             }
-
             Application.DoEvents();
         }
-
-        private void autoScaleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            needsAutoScaling = true;
-        }
-
-  
-
-        public void itteration()
-        {
-            for (int q = 0; q < 6; q++)
-            {
-
-                int bit = q;
-                int q_levels = Convert.ToInt32(Math.Pow(2, Convert.ToDouble(bit)));
-                int[] sk = new int[q_levels];
-                int[] lu = new int[q_levels];
-                int[] neww = new int[q_levels];
-                int[] m = new int[q_levels + 1];
-                int[] X = new int[q_levels];
-                int[] Y = new int[q_levels];
-                int minv = -10;
-                int maxv = 10;
-                int len = (-1 * minv + maxv) / q_levels;
-                int[] a = new int[X.Length];
-                int[] b = new int[X.Length];
-                double[] msı = new double[X.Length];
-                for (int i = 0; i < q_levels + 1; i++)
-                {
-                    m[i] = minv + (i - 1) * len;
-                }
-
-
-                var dat = from data in m
-                          orderby m ascending
-                          select data;
-                int f = 0;
-                int[] sig = new int[m.Length];
-                foreach (var item in dat)
-                {
-                    sig[f++] = item;
-                }
-                for (int i = 1; i < q_levels; i++)
-                {
-                    for (int k = 1; k < q_levels; k++)
-                    {
-                        sk[k] = cent(m[k], m[k + 1], sig[0], k, q_levels);
-                        lu[k] = cent(m[k], m[k + 1], sig[0], k, q_levels);
-                        neww[k] = sk[k] / lu[k];
-                    }
-                    for (int k = 2; k < q_levels; k++)
-                    {
-
-                        m[k] = (neww[k - 1] + neww[k]) / 2;
-                    }
-                    for (int h = 1; h < q_levels; h++)
-                    {
-                        for (int t = 1; t < 10000; t++)
-                        {
-                            if (X[t] < m[h + 1] && X[t] >= m[h])
-                            {
-                                Y[t] = neww[h];
-                            }
-                        }
-                    }
-                    for (int ş = 0; ş < X.Length; ş++)
-                    {
-                        a[ş] = X[ş] - Y[ş];
-                        b[ş] = Convert.ToInt32(Math.Pow(Convert.ToDouble(a[ş]), 2));
-                    }
-                    int sum = 0;
-                    for (int ii = 0; ii < b.Length; ii++)
-                    {
-                        sum += b[ii];
-                    }
-                    msı[i] = sum / 10000;
-                }
-
-                scottPlotUC1.Clear();
-                scottPlotUC1.PlotSignal(msı, 1, Color.Blue);
-
-            }
-        }
-
         public int cent(int m, int m1, int sig, int k, int q_levels)
         {
             int cent = 0;
@@ -294,19 +232,13 @@ namespace ScottPlotMicrophoneFFT
         }
         private void button1_Click(object sender, EventArgs e)
         {
-
-
             PlotLatestData();
-
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Environment.Exit(0);
         }
-
-
-
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Control)
@@ -321,38 +253,12 @@ namespace ScottPlotMicrophoneFFT
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             scottPlotUC1.AxisAuto();
             scottPlotUC2.AxisAuto();
             scottPlotUC3.AxisAuto();
             scottPlotUC4.AxisAuto();
-        }
-        int switch_on = 1; 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            switch (switch_on)
-            {
-                case 0:
-                    scottPlotUC1.Clear();
-                    scottPlotUC1.PlotSignal(aJ3, 1, Color.Blue);
-                    scottPlotUC4.Clear();
-                    scottPlotUC4.PlotSignal(bJ3, 1, Color.Red);
-                  
-                    scottPlotUC4.Visible = true ;
-                    scottPlotUC1.AxisAuto();
-                    scottPlotUC4.AxisAuto();
-                    switch_on = 1;
-                    break;
-
-                case 1:
-                    scottPlotUC1.Clear();
-                    scottPlotUC1.PlotSignal(aJ3, 1, Color.Blue);
-                    scottPlotUC1.PlotSignal(bJ3, 1, Color.Red);
-                    scottPlotUC1.AxisAuto();
-                    scottPlotUC4.Visible= false;
-                   switch_on = 0;
-                    break;
-            }
+            scottPlotUC5.AxisAuto();
+            scottPlotUC6.AxisAuto();
         }
     }
 }

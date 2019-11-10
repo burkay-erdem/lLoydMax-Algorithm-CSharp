@@ -36,14 +36,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.scottPlotUC1 = new ScottPlot.ScottPlotUC();
+            this.scottPlotUC5 = new ScottPlot.ScottPlotUC();
             this.scottPlotUC4 = new ScottPlot.ScottPlotUC();
-            this.button3 = new System.Windows.Forms.Button();
+            this.scottPlotUC1 = new ScottPlot.ScottPlotUC();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.scottPlotUC6 = new ScottPlot.ScottPlotUC();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerReplot
@@ -64,11 +65,11 @@
             // scottPlotUC2
             // 
             this.scottPlotUC2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.scottPlotUC2.Location = new System.Drawing.Point(3, 256);
+            this.scottPlotUC2.Location = new System.Drawing.Point(3, 226);
             this.scottPlotUC2.Margin = new System.Windows.Forms.Padding(2);
             this.scottPlotUC2.Name = "scottPlotUC2";
             this.scottPlotUC2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 20);
-            this.scottPlotUC2.Size = new System.Drawing.Size(1336, 270);
+            this.scottPlotUC2.Size = new System.Drawing.Size(1336, 241);
             this.scottPlotUC2.TabIndex = 1;
             // 
             // scottPlotUC3
@@ -77,7 +78,7 @@
             this.scottPlotUC3.Location = new System.Drawing.Point(3, 3);
             this.scottPlotUC3.Margin = new System.Windows.Forms.Padding(2);
             this.scottPlotUC3.Name = "scottPlotUC3";
-            this.scottPlotUC3.Size = new System.Drawing.Size(1336, 253);
+            this.scottPlotUC3.Size = new System.Drawing.Size(1336, 223);
             this.scottPlotUC3.TabIndex = 4;
             // 
             // label1
@@ -110,21 +111,9 @@
             this.tabControl1.Size = new System.Drawing.Size(1350, 740);
             this.tabControl1.TabIndex = 7;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.scottPlotUC2);
-            this.tabPage1.Controls.Add(this.scottPlotUC3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1342, 714);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "GAUSS-MSE";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.button3);
+            this.tabPage2.Controls.Add(this.scottPlotUC5);
             this.tabPage2.Controls.Add(this.scottPlotUC4);
             this.tabPage2.Controls.Add(this.scottPlotUC1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -132,8 +121,26 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1342, 714);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "A(j)-B(j)";
+            this.tabPage2.Text = "A(j)-B(j) normal";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // scottPlotUC5
+            // 
+            this.scottPlotUC5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.scottPlotUC5.Location = new System.Drawing.Point(3, 505);
+            this.scottPlotUC5.Margin = new System.Windows.Forms.Padding(2);
+            this.scottPlotUC5.Name = "scottPlotUC5";
+            this.scottPlotUC5.Size = new System.Drawing.Size(1336, 247);
+            this.scottPlotUC5.TabIndex = 3;
+            // 
+            // scottPlotUC4
+            // 
+            this.scottPlotUC4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.scottPlotUC4.Location = new System.Drawing.Point(3, 258);
+            this.scottPlotUC4.Margin = new System.Windows.Forms.Padding(2);
+            this.scottPlotUC4.Name = "scottPlotUC4";
+            this.scottPlotUC4.Size = new System.Drawing.Size(1336, 247);
+            this.scottPlotUC4.TabIndex = 2;
             // 
             // scottPlotUC1
             // 
@@ -145,24 +152,27 @@
             this.scottPlotUC1.Size = new System.Drawing.Size(1336, 255);
             this.scottPlotUC1.TabIndex = 1;
             // 
-            // scottPlotUC4
+            // tabPage1
             // 
-            this.scottPlotUC4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.scottPlotUC4.Location = new System.Drawing.Point(3, 258);
-            this.scottPlotUC4.Margin = new System.Windows.Forms.Padding(2);
-            this.scottPlotUC4.Name = "scottPlotUC4";
-            this.scottPlotUC4.Size = new System.Drawing.Size(1336, 302);
-            this.scottPlotUC4.TabIndex = 2;
+            this.tabPage1.Controls.Add(this.scottPlotUC6);
+            this.tabPage1.Controls.Add(this.scottPlotUC2);
+            this.tabPage1.Controls.Add(this.scottPlotUC3);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1342, 714);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "A(j)-B(j) gauss";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // scottPlotUC6
             // 
-            this.button3.Location = new System.Drawing.Point(52, 28);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "birleştir";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.scottPlotUC6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.scottPlotUC6.Location = new System.Drawing.Point(3, 467);
+            this.scottPlotUC6.Margin = new System.Windows.Forms.Padding(2);
+            this.scottPlotUC6.Name = "scottPlotUC6";
+            this.scottPlotUC6.Size = new System.Drawing.Size(1336, 247);
+            this.scottPlotUC6.TabIndex = 5;
             // 
             // Form1
             // 
@@ -182,8 +192,8 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,7 +211,8 @@
         private System.Windows.Forms.TabPage tabPage1;
         private ScottPlot.ScottPlotUC scottPlotUC1;
         private ScottPlot.ScottPlotUC scottPlotUC4;
-        private System.Windows.Forms.Button button3;
+        private ScottPlot.ScottPlotUC scottPlotUC5;
+        private ScottPlot.ScottPlotUC scottPlotUC6;
     }
 }
 
