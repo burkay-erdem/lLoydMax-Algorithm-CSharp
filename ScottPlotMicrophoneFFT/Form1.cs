@@ -13,7 +13,8 @@ namespace ScottPlotMicrophoneFFT
 {
     public partial class Form1 : Form
     {
-
+        double[] aJ3 = new double[21 + 1];
+        double[] bJ3 = new double[21];
 
         public Form1()
         {
@@ -26,10 +27,15 @@ namespace ScottPlotMicrophoneFFT
         }
         public void SetupGraphLabels()
         {
-            scottPlotUC1.fig.labelTitle = "INPUTS";
+            scottPlotUC1.fig.labelTitle = "INPUTS(Aj)";
             scottPlotUC1.fig.labelY = "Inputs ";
             scottPlotUC1.fig.labelX = "index";
             scottPlotUC1.Redraw();
+
+            scottPlotUC4.fig.labelTitle = "INPUTS(Bj)";
+            scottPlotUC4.fig.labelY = "Inputs ";
+            scottPlotUC4.fig.labelX = "index";
+            scottPlotUC4.Redraw();
 
             scottPlotUC2.fig.labelTitle = "GAUSS Distribution";
             scottPlotUC2.fig.labelY = "Gauss POW";
@@ -53,22 +59,28 @@ namespace ScottPlotMicrophoneFFT
         public bool needsAutoScaling = true;
         public void PlotLatestData()
         {
+
             int mseindex = 0;
-            int M = 20;
+            int M = 21;
             double[] mse_arr = new double[M];
             double[] aJ = new double[M + 1];
             double[] bJ = new double[M];
             double[] gauss = new double[M + 1];
             double MSE_er = 0;
             int minValue = -20, maxValue = 20;
-
             Random rand = new Random();
 
             for (int i = 0; i < M + 1; i++)
             {
+                retry:
                 aJ[i] = rand.Next(minValue, maxValue);
+                for (int k = 0; k < i; k++)
+                {
+                    if (aJ[i] == aJ[k])
+                        goto retry;
+                }
+               
             }
-
 
             Array.Sort(aJ);
 
@@ -92,27 +104,24 @@ namespace ScottPlotMicrophoneFFT
                 mseindex++;
 
             }
-
-            //if (mseindex >= 1)
-            //{
-            //    if (MSE_er*100/100 <= mse_arr[mseindex - 1] )
-            //        break;
-            //}
-           
-
-
             scottPlotUC1.Clear();
             scottPlotUC1.PlotSignal(aJ, 1, Color.Blue);
+            scottPlotUC4.Clear();
+            scottPlotUC4.PlotSignal(bJ, 1, Color.Red);
             scottPlotUC2.Clear();
             scottPlotUC2.PlotSignal(gauss, 1, Color.Blue);
             scottPlotUC3.Clear();
             scottPlotUC3.PlotSignal(mse_arr, 1, Color.Blue);
-
+            Array.Copy(aJ, aJ3, aJ.Length);
+            Array.Copy(bJ, bJ3, bJ.Length);
+           
             if (needsAutoScaling)
             {
                 scottPlotUC1.AxisAuto();
                 scottPlotUC2.AxisAuto();
                 scottPlotUC3.AxisAuto();
+
+                scottPlotUC4.AxisAuto();
                 needsAutoScaling = false;
             }
 
@@ -124,15 +133,7 @@ namespace ScottPlotMicrophoneFFT
             needsAutoScaling = true;
         }
 
-        private void infoMessageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string msg = "";
-            msg += "left-click-drag to pan\n";
-            msg += "right-click-drag to zoom\n";
-            msg += "middle-click to auto-axis\n";
-            msg += "double-click for graphing stats\n";
-            MessageBox.Show(msg);
-        }
+  
 
         public void itteration()
         {
@@ -324,6 +325,34 @@ namespace ScottPlotMicrophoneFFT
             scottPlotUC1.AxisAuto();
             scottPlotUC2.AxisAuto();
             scottPlotUC3.AxisAuto();
+            scottPlotUC4.AxisAuto();
+        }
+        int switch_on = 1; 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            switch (switch_on)
+            {
+                case 0:
+                    scottPlotUC1.Clear();
+                    scottPlotUC1.PlotSignal(aJ3, 1, Color.Blue);
+                    scottPlotUC4.Clear();
+                    scottPlotUC4.PlotSignal(bJ3, 1, Color.Red);
+                  
+                    scottPlotUC4.Visible = true ;
+                    scottPlotUC1.AxisAuto();
+                    scottPlotUC4.AxisAuto();
+                    switch_on = 1;
+                    break;
+
+                case 1:
+                    scottPlotUC1.Clear();
+                    scottPlotUC1.PlotSignal(aJ3, 1, Color.Blue);
+                    scottPlotUC1.PlotSignal(bJ3, 1, Color.Red);
+                    scottPlotUC1.AxisAuto();
+                    scottPlotUC4.Visible= false;
+                   switch_on = 0;
+                    break;
+            }
         }
     }
 }
